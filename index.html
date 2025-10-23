@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pomodoro Timer</title>
+    <title>Pastel Pomodoro Timer</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -13,7 +13,28 @@
             --pastel-purple: #C9C2FF;
             --pastel-yellow: #FFF2CC;
             --text-dark: #5A5A5A;
+            --text-light: #F5F5F5;
+            --bg-light: #FAFAFA;
+            --bg-dark: #2D3748;
+            --card-light: rgba(255, 255, 255, 0.8);
+            --card-dark: rgba(45, 55, 72, 0.8);
             --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --shadow-dark: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .dark-mode {
+            --pastel-pink: #4A2E3C;
+            --pastel-blue: #2E3C4A;
+            --pastel-green: #2E4A3C;
+            --pastel-purple: #3C2E4A;
+            --pastel-yellow: #4A3C2E;
+            --text-dark: #E2E8F0;
+            --text-light: #F5F5F5;
+            --bg-light: #1A202C;
+            --bg-dark: #1A202C;
+            --card-light: rgba(45, 55, 72, 0.8);
+            --card-dark: rgba(45, 55, 72, 0.8);
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
         }
         
         * {
@@ -21,6 +42,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s, color 0.3s;
         }
         
         body {
@@ -36,7 +58,7 @@
         }
         
         .container {
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: var(--card-light);
             border-radius: 25px;
             padding: 40px 30px;
             width: 100%;
@@ -77,12 +99,12 @@
         
         .work .session-type {
             background-color: var(--pastel-pink);
-            color: #D46A7E;
+            color: var(--text-dark);
         }
         
         .break .session-type {
             background-color: var(--pastel-green);
-            color: #5A9B7E;
+            color: var(--text-dark);
         }
         
         .controls {
@@ -93,7 +115,7 @@
         }
         
         button {
-            background-color: white;
+            background-color: var(--card-light);
             color: var(--text-dark);
             border: none;
             border-radius: 50px;
@@ -130,10 +152,14 @@
         }
         
         .settings {
-            background-color: rgba(255, 255, 255, 0.6);
+            background-color: rgba(255, 255, 255, 0.3);
             border-radius: 20px;
             padding: 20px;
             margin-top: 20px;
+        }
+        
+        .dark-mode .settings {
+            background-color: rgba(0, 0, 0, 0.2);
         }
         
         .settings h2 {
@@ -155,7 +181,7 @@
         }
         
         .setting-group input {
-            background-color: white;
+            background-color: var(--card-light);
             color: var(--text-dark);
             border: 2px solid var(--pastel-purple);
             border-radius: 10px;
@@ -169,10 +195,14 @@
         .progress-container {
             width: 100%;
             height: 12px;
-            background-color: rgba(255, 255, 255, 0.5);
+            background-color: rgba(255, 255, 255, 0.3);
             border-radius: 10px;
             margin: 20px 0;
             overflow: hidden;
+        }
+        
+        .dark-mode .progress-container {
+            background-color: rgba(0, 0, 0, 0.2);
         }
         
         .progress-bar {
@@ -196,12 +226,16 @@
             align-items: center;
             justify-content: center;
             gap: 10px;
-            background-color: rgba(255, 255, 255, 0.6);
+            background-color: rgba(255, 255, 255, 0.3);
             padding: 10px 20px;
             border-radius: 50px;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
+        }
+        
+        .dark-mode .audio-control {
+            background-color: rgba(0, 0, 0, 0.2);
         }
         
         .audio-control label {
@@ -338,6 +372,250 @@
             width: 100px;
         }
         
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--pastel-purple);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            box-shadow: var(--shadow);
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .theme-toggle:hover {
+            transform: scale(1.1);
+        }
+        
+        .music-box {
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+        }
+        
+        .dark-mode .music-box {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .music-box h2 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+        }
+        
+        .music-tracks {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .music-track {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .dark-mode .music-track {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .music-track:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .dark-mode .music-track:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .music-track.selected {
+            background-color: var(--pastel-purple);
+        }
+        
+        .track-checkbox {
+            width: 18px;
+            height: 18px;
+            border-radius: 4px;
+            border: 2px solid var(--pastel-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .music-track.selected .track-checkbox {
+            background-color: var(--pastel-purple);
+        }
+        
+        .music-track.selected .track-checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+        }
+        
+        .track-info {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .track-name {
+            font-weight: 500;
+        }
+        
+        .track-duration {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        
+        /* Task Box Styles */
+        .task-box {
+            margin: 20px 0;
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 20px;
+        }
+        
+        .dark-mode .task-box {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .task-box h2 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .task-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .task-input input {
+            flex: 1;
+            background-color: var(--card-light);
+            color: var(--text-dark);
+            border: 2px solid var(--pastel-purple);
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 1rem;
+        }
+        
+        .task-input button {
+            background-color: var(--pastel-green);
+            padding: 10px 20px;
+        }
+        
+        .task-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+        
+        .dark-mode .task-item {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+        
+        .task-item:hover {
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .dark-mode .task-item:hover {
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        
+        .task-item.completed {
+            opacity: 0.7;
+            text-decoration: line-through;
+        }
+        
+        .task-checkbox {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid var(--pastel-purple);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        
+        .task-item.completed .task-checkbox {
+            background-color: var(--pastel-green);
+            border-color: var(--pastel-green);
+        }
+        
+        .task-item.completed .task-checkbox::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+        }
+        
+        .task-text {
+            flex: 1;
+            text-align: left;
+            font-weight: 500;
+        }
+        
+        .task-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .task-actions button {
+            background: none;
+            border: none;
+            padding: 5px;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            opacity: 0.7;
+            box-shadow: none;
+        }
+        
+        .task-actions button:hover {
+            opacity: 1;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .tasks-summary {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-align: left;
+        }
+        
         @media (max-width: 600px) {
             .container {
                 padding: 30px 20px;
@@ -354,6 +632,14 @@
             .sticker {
                 display: none;
             }
+            
+            .theme-toggle {
+                top: 10px;
+                right: 10px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -367,6 +653,10 @@
     <div class="sticker sticker-6"><i class="fas fa-bolt"></i></div>
     
     <div class="container work">
+        <button class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </button>
+        
         <h1>Pomodoro Timer</h1>
         
         <div class="timer-display" id="timer">25:00</div>
@@ -377,6 +667,22 @@
             <div class="progress-bar" id="progress-bar"></div>
         </div>
         
+        <!-- Task Box -->
+        <div class="task-box">
+            <h2>
+                Tasks
+                <span id="tasks-count">0/0</span>
+            </h2>
+            <div class="task-input">
+                <input type="text" id="task-input" placeholder="Add a new task...">
+                <button id="add-task-btn"><i class="fas fa-plus"></i> Add</button>
+            </div>
+            <div class="task-list" id="task-list">
+                <!-- Tasks will be added here dynamically -->
+            </div>
+            <div class="tasks-summary" id="tasks-summary">No tasks yet</div>
+        </div>
+        
         <div class="controls">
             <button id="start-btn"><i class="fas fa-play"></i> Start</button>
             <button id="pause-btn"><i class="fas fa-pause"></i> Pause</button>
@@ -384,13 +690,20 @@
         </div>
         
         <div class="audio-control">
-            <label for="audio-toggle">Moon Maiden Audio:</label>
+            <label for="audio-toggle">Background Music:</label>
             <input type="checkbox" id="audio-toggle">
         </div>
         
         <div class="volume-control">
             <label for="volume-slider">Volume:</label>
             <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
+        </div>
+        
+        <div class="music-box">
+            <h2>Music Box</h2>
+            <div class="music-tracks" id="music-tracks">
+                <!-- Music tracks will be added here by JavaScript -->
+            </div>
         </div>
         
         <div class="settings">
@@ -413,7 +726,7 @@
         Time's up! Starting break session.
     </div>
 
-    <!-- Hidden audio element -->
+    <!-- Hidden audio elements -->
     <audio id="lofi-audio" loop>
         <source src="Moon-maiden-audio.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
@@ -435,6 +748,15 @@
             const audioToggle = document.getElementById('audio-toggle');
             const lofiAudio = document.getElementById('lofi-audio');
             const volumeSlider = document.getElementById('volume-slider');
+            const themeToggle = document.getElementById('theme-toggle');
+            const musicTracksContainer = document.getElementById('music-tracks');
+            
+            // Task elements
+            const taskInput = document.getElementById('task-input');
+            const addTaskBtn = document.getElementById('add-task-btn');
+            const taskList = document.getElementById('task-list');
+            const tasksCount = document.getElementById('tasks-count');
+            const tasksSummary = document.getElementById('tasks-summary');
             
             // Timer variables
             let timer;
@@ -444,8 +766,193 @@
             let totalTime;
             let audioEnabled = false;
             
+            // Task variables
+            let tasks = [];
+            
+            // Music tracks data
+            const musicTracks = [
+                { id: 1, name: "Moon Maiden", duration: "3:45", file: "Moon-maiden-audio.mp3", selected: true },
+                { id: 2, name: "Lofi Study", duration: "2:30", file: "lofi-study.mp3", selected: false },
+                { id: 3, name: "Calm Piano", duration: "4:15", file: "calm-piano.mp3", selected: false },
+                { id: 4, name: "Rainy Day", duration: "3:20", file: "rainy-day.mp3", selected: false },
+                { id: 5, name: "Coffee Shop", duration: "2:50", file: "coffee-shop.mp3", selected: false }
+            ];
+            
+            // Selected tracks
+            let selectedTracks = [musicTracks[0]];
+            
             // Set initial volume
             lofiAudio.volume = volumeSlider.value;
+            
+            // Initialize tasks
+            function initializeTasks() {
+                loadTasksFromStorage();
+                renderTasks();
+            }
+            
+            // Load tasks from localStorage
+            function loadTasksFromStorage() {
+                const savedTasks = localStorage.getItem('pomodoroTasks');
+                if (savedTasks) {
+                    tasks = JSON.parse(savedTasks);
+                }
+            }
+            
+            // Save tasks to localStorage
+            function saveTasksToStorage() {
+                localStorage.setItem('pomodoroTasks', JSON.stringify(tasks));
+            }
+            
+            // Render tasks
+            function renderTasks() {
+                taskList.innerHTML = '';
+                
+                if (tasks.length === 0) {
+                    taskList.innerHTML = '<div class="task-item" style="justify-content: center; opacity: 0.7;">No tasks yet</div>';
+                    tasksCount.textContent = '0/0';
+                    tasksSummary.textContent = 'No tasks yet';
+                    return;
+                }
+                
+                tasks.forEach((task, index) => {
+                    const taskElement = document.createElement('div');
+                    taskElement.className = `task-item ${task.completed ? 'completed' : ''}`;
+                    taskElement.innerHTML = `
+                        <div class="task-checkbox" data-index="${index}"></div>
+                        <div class="task-text">${task.text}</div>
+                        <div class="task-actions">
+                            <button class="edit-task" data-index="${index}"><i class="fas fa-edit"></i></button>
+                            <button class="delete-task" data-index="${index}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    
+                    // Toggle completion
+                    taskElement.querySelector('.task-checkbox').addEventListener('click', () => {
+                        toggleTaskCompletion(index);
+                    });
+                    
+                    // Edit task
+                    taskElement.querySelector('.edit-task').addEventListener('click', () => {
+                        editTask(index);
+                    });
+                    
+                    // Delete task
+                    taskElement.querySelector('.delete-task').addEventListener('click', () => {
+                        deleteTask(index);
+                    });
+                    
+                    taskList.appendChild(taskElement);
+                });
+                
+                updateTasksSummary();
+            }
+            
+            // Update tasks summary
+            function updateTasksSummary() {
+                const totalTasks = tasks.length;
+                const completedTasks = tasks.filter(task => task.completed).length;
+                
+                tasksCount.textContent = `${completedTasks}/${totalTasks}`;
+                
+                if (totalTasks === 0) {
+                    tasksSummary.textContent = 'No tasks yet';
+                } else if (completedTasks === totalTasks) {
+                    tasksSummary.textContent = 'All tasks completed! 🎉';
+                } else {
+                    tasksSummary.textContent = `${completedTasks} of ${totalTasks} tasks completed`;
+                }
+            }
+            
+            // Add new task
+            function addTask() {
+                const text = taskInput.value.trim();
+                if (text === '') return;
+                
+                tasks.push({
+                    text: text,
+                    completed: false,
+                    createdAt: new Date().toISOString()
+                });
+                
+                taskInput.value = '';
+                saveTasksToStorage();
+                renderTasks();
+            }
+            
+            // Toggle task completion
+            function toggleTaskCompletion(index) {
+                tasks[index].completed = !tasks[index].completed;
+                saveTasksToStorage();
+                renderTasks();
+            }
+            
+            // Edit task
+            function editTask(index) {
+                const newText = prompt('Edit task:', tasks[index].text);
+                if (newText !== null && newText.trim() !== '') {
+                    tasks[index].text = newText.trim();
+                    saveTasksToStorage();
+                    renderTasks();
+                }
+            }
+            
+            // Delete task
+            function deleteTask(index) {
+                if (confirm('Are you sure you want to delete this task?')) {
+                    tasks.splice(index, 1);
+                    saveTasksToStorage();
+                    renderTasks();
+                }
+            }
+            
+            // Initialize music tracks UI
+            function initializeMusicTracks() {
+                musicTracksContainer.innerHTML = '';
+                
+                musicTracks.forEach(track => {
+                    const trackElement = document.createElement('div');
+                    trackElement.className = `music-track ${track.selected ? 'selected' : ''}`;
+                    trackElement.innerHTML = `
+                        <div class="track-checkbox"></div>
+                        <div class="track-info">
+                            <div class="track-name">${track.name}</div>
+                            <div class="track-duration">${track.duration}</div>
+                        </div>
+                    `;
+                    
+                    trackElement.addEventListener('click', () => {
+                        track.selected = !track.selected;
+                        
+                        if (track.selected) {
+                            selectedTracks.push(track);
+                        } else {
+                            selectedTracks = selectedTracks.filter(t => t.id !== track.id);
+                        }
+                        
+                        updateMusicTracksUI();
+                        
+                        // If audio is playing and this track was selected, update the playlist
+                        if (audioEnabled && isRunning) {
+                            // In a real implementation, you would update the audio playlist here
+                            console.log("Selected tracks updated:", selectedTracks.map(t => t.name));
+                        }
+                    });
+                    
+                    musicTracksContainer.appendChild(trackElement);
+                });
+            }
+            
+            // Update music tracks UI
+            function updateMusicTracksUI() {
+                const trackElements = document.querySelectorAll('.music-track');
+                trackElements.forEach((element, index) => {
+                    if (musicTracks[index].selected) {
+                        element.classList.add('selected');
+                    } else {
+                        element.classList.remove('selected');
+                    }
+                });
+            }
             
             // Initialize timer
             function initializeTimer() {
@@ -477,16 +984,11 @@
                 if (!isRunning) {
                     isRunning = true;
                     
-                    // Start lofi audio if enabled
-                    if (audioEnabled) {
+                    // Start audio if enabled
+                    if (audioEnabled && selectedTracks.length > 0) {
                         lofiAudio.play().catch(e => {
                             console.log("Audio play failed:", e);
-                            // Show user-friendly message
-                            notification.innerHTML = '<i class="fas fa-volume-mute"></i> Audio failed to play. Please interact with page first.';
-                            notification.classList.add('show');
-                            setTimeout(() => {
-                                notification.classList.remove('show');
-                            }, 5000);
+                            showAudioError();
                         });
                     }
                     
@@ -559,6 +1061,15 @@
                 }, 5000);
             }
             
+            // Show audio error
+            function showAudioError() {
+                notification.innerHTML = '<i class="fas fa-volume-mute"></i> Audio failed to play. Please interact with page first.';
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 5000);
+            }
+            
             // Play notification sound
             function playNotificationSound() {
                 // Try to use the Web Audio API for a simple beep
@@ -583,10 +1094,37 @@
                 }
             }
             
+            // Toggle dark mode
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+                const icon = themeToggle.querySelector('i');
+                
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.className = 'fas fa-sun';
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    icon.className = 'fas fa-moon';
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            }
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                themeToggle.querySelector('i').className = 'fas fa-sun';
+            }
+            
             // Event listeners
             startBtn.addEventListener('click', startTimer);
             pauseBtn.addEventListener('click', pauseTimer);
             resetBtn.addEventListener('click', resetTimer);
+            themeToggle.addEventListener('click', toggleDarkMode);
+            addTaskBtn.addEventListener('click', addTask);
+            taskInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addTask();
+                }
+            });
             
             workDurationInput.addEventListener('change', function() {
                 if (!isRunning && isWorkSession) {
@@ -605,7 +1143,7 @@
                 if (!audioEnabled) {
                     lofiAudio.pause();
                     lofiAudio.currentTime = 0;
-                } else if (isRunning) {
+                } else if (isRunning && selectedTracks.length > 0) {
                     lofiAudio.play().catch(e => {
                         console.log("Audio play failed:", e);
                     });
@@ -616,8 +1154,10 @@
                 lofiAudio.volume = this.value;
             });
             
-            // Initialize the timer on page load
+            // Initialize the timer, tasks, and music tracks on page load
             initializeTimer();
+            initializeTasks();
+            initializeMusicTracks();
             
             // Add a one-time click event to enable audio (required by some browsers)
             document.body.addEventListener('click', function initAudio() {
