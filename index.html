@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro Timer</title>
+    <style>
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #2ecc71;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --work-color: #e74c3c;
+            --break-color: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            color: var(--light-color);
+        }
+        
+        .timer-display {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .session-type {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        button {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        #start-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        #pause-btn {
+            background-color: #f39c12;
+            color: white;
+        }
+        
+        #reset-btn {
+            background-color: #95a5a6;
+            color: white;
+        }
+        
+        .settings {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .settings h2 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+        }
+        
+        .setting-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .setting-group label {
+            font-size: 1rem;
+        }
+        
+        .setting-group input {
+            background-color: var(--dark-color);
+            color: var(--light-color);
+            border: 1px solid var(--light-color);
+            border-radius: 5px;
+            padding: 8px 12px;
+            width: 80px;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            transition: width 1s linear;
+        }
+        
+        .work .progress-bar {
+            background-color: var(--work-color);
+        }
+        
+        .break .progress-bar {
+            background-color: var(--break-color);
+        }
+        
+        .work .session-type {
+            color: var(--work-color);
+        }
+        
+        .break .session-type {
+            color: var(--break-color);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateX(150%);
+            transition: transform 0.5s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .timer-display {
+                font-size: 4rem;
+            }
+            
+            .controls {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pomodoro Timer</h1>
+        
+        <div class="timer-display" id="timer">25:00</div>
+        
+        <div class="session-type" id="session-type">Work Session</div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start</button>
+            <button id="pause-btn">Pause</button>
+            <button id="reset-btn">Reset</button>
+        </div>
+        
+        <div class="settings">
+            <h2>Timer Settings</h2>
+            
+            <div class="setting-group">
+                <label for="work-duration">Work Duration (minutes):</label>
+                <input type="number" id="work-duration" min="1" max="60" value="25">
+            </div>
+            
+            <div class="setting-group">
+                <label for="break-duration">Break Duration (minutes):</label>
+                <input type="number" id="break-duration" min="1" max="30" value="5">
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        Time's up! Starting break session.
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM elements
+            const timerDisplay = document.getElementById('timer');
+            const sessionTypeDisplay = document.getElementById('session-type');
+            const startBtn = document.getElementById('start-btn');
+            const pauseBtn = document.getElementById('pause-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const workDurationInput = document.getElementById('work-duration');
+            const breakDurationInput = document.getElementById('break-duration');
+            const progressBar = document.getElementById('progress-bar');
+            const notification = document.getElementById('notification');
+            const container = document.querySelector('.container');
+            
+            // Timer variables
+            let timer;
+            let isRunning = false;
+            let isWorkSession = true;
+            let timeLeft;
+            let totalTime;
+            
+            // Initialize timer
+            function initializeTimer() {
+                const duration = isWorkSession ? 
+                    parseInt(workDurationInput.value) : 
+                    parseInt(breakDurationInput.value);
+                
+                timeLeft = duration * 60; // Convert to seconds
+                totalTime = timeLeft;
+                updateDisplay();
+                updateProgressBar();
+            }
+            
+            // Update timer display
+            function updateDisplay() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+            
+            // Update progress bar
+            function updateProgressBar() {
+                const progress = ((totalTime - timeLeft) / totalTime) * 100;
+                progressBar.style.width = `${progress}%`;
+            }
+            
+            // Start timer
+            function startTimer() {
+                if (!isRunning) {
+                    isRunning = true;
+                    timer = setInterval(() => {
+                        timeLeft--;
+                        updateDisplay();
+                        updateProgressBar();
+                        
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            isRunning = false;
+                            showNotification();
+                            switchSession();
+                        }
+                    }, 1000);
+                }
+            }
+            
+            // Pause timer
+            function pauseTimer() {
+                if (isRunning) {
+                    clearInterval(timer);
+                    isRunning = false;
+                }
+            }
+            
+            // Reset timer
+            function resetTimer() {
+                clearInterval(timer);
+                isRunning = false;
+                initializeTimer();
+            }
+            
+            // Switch between work and break sessions
+            function switchSession() {
+                isWorkSession = !isWorkSession;
+                
+                // Update session type display
+                sessionTypeDisplay.textContent = isWorkSession ? 'Work Session' : 'Break Session';
+                
+                // Update container class for styling
+                container.className = isWorkSession ? 'container work' : 'container break';
+                
+                // Update notification message
+                notification.textContent = isWorkSession ? 
+                    'Break is over! Starting work session.' : 
+                    'Time\'s up! Starting break session.';
+                
+                // Initialize the new session timer
+                initializeTimer();
+                
+                // Auto-start the next session
+                startTimer();
+            }
+            
+            // Show notification
+            function showNotification() {
+                notification.classList.add('show');
+                
+                // Play notification sound if available
+                playNotificationSound();
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 5000);
+            }
+            
+            // Play notification sound
+            function playNotificationSound() {
+                // Try to use the Web Audio API for a simple beep
+                try {
+                    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioContext.createOscillator();
+                    const gainNode = audioContext.createGain();
+                    
+                    oscillator.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+                    
+                    oscillator.frequency.value = 800;
+                    oscillator.type = 'sine';
+                    
+                    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+                    
+                    oscillator.start(audioContext.currentTime);
+                    oscillator.stop(audioContext.currentTime + 1);
+                } catch (e) {
+                    console.log('Audio context not supported');
+                }
+            }
+            
+            // Event listeners
+            startBtn.addEventListener('click', startTimer);
+            pauseBtn.addEventListener('click', pauseTimer);
+            resetBtn.addEventListener('click', resetTimer);
+            
+            workDurationInput.addEventListener('change', function() {
+                if (!isRunning && isWorkSession) {
+                    initializeTimer();
+                }
+            });
+            
+            breakDurationInput.addEventListener('change', function() {
+                if (!isRunning && !isWorkSession) {
+                    initializeTimer();
+                }
+            });
+            
+            // Initialize the timer on page load
+            initializeTimer();
+        });
+    </script>
+</body>
+</html>
