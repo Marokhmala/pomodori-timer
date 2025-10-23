@@ -4,14 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pomodoro Timer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-color: #e74c3c;
-            --secondary-color: #2ecc71;
-            --dark-color: #2c3e50;
-            --light-color: #ecf0f1;
-            --work-color: #e74c3c;
-            --break-color: #2ecc71;
+            --pastel-pink: #FFD1DC;
+            --pastel-blue: #AEC6CF;
+            --pastel-green: #B5EAD7;
+            --pastel-purple: #C9C2FF;
+            --pastel-yellow: #FFF2CC;
+            --text-dark: #5A5A5A;
+            --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
         }
         
         * {
@@ -22,44 +24,65 @@
         }
         
         body {
-            background-color: var(--dark-color);
-            color: var(--light-color);
+            background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-blue));
+            color: var(--text-dark);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: hidden;
         }
         
         .container {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 25px;
+            padding: 40px 30px;
             width: 100%;
             max-width: 500px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: var(--shadow);
             text-align: center;
+            position: relative;
+            z-index: 10;
+            backdrop-filter: blur(10px);
         }
         
         h1 {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             font-size: 2.5rem;
-            color: var(--light-color);
+            color: var(--text-dark);
+            font-weight: 700;
         }
         
         .timer-display {
-            font-size: 5rem;
-            font-weight: bold;
+            font-size: 5.5rem;
+            font-weight: 700;
             margin: 30px 0;
             font-family: 'Courier New', monospace;
+            color: var(--text-dark);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .session-type {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin-bottom: 20px;
             text-transform: uppercase;
             letter-spacing: 2px;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+        
+        .work .session-type {
+            background-color: var(--pastel-pink);
+            color: #D46A7E;
+        }
+        
+        .break .session-type {
+            background-color: var(--pastel-green);
+            color: #5A9B7E;
         }
         
         .controls {
@@ -70,20 +93,24 @@
         }
         
         button {
-            background-color: var(--light-color);
-            color: var(--dark-color);
+            background-color: white;
+            color: var(--text-dark);
             border: none;
             border-radius: 50px;
             padding: 12px 25px;
             font-size: 1rem;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         
         button:hover {
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
         }
         
         button:active {
@@ -91,23 +118,20 @@
         }
         
         #start-btn {
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--pastel-green);
         }
         
         #pause-btn {
-            background-color: #f39c12;
-            color: white;
+            background-color: var(--pastel-yellow);
         }
         
         #reset-btn {
-            background-color: #95a5a6;
-            color: white;
+            background-color: var(--pastel-pink);
         }
         
         .settings {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 20px;
             padding: 20px;
             margin-top: 20px;
         }
@@ -115,6 +139,7 @@
         .settings h2 {
             margin-bottom: 20px;
             font-size: 1.3rem;
+            color: var(--text-dark);
         }
         
         .setting-group {
@@ -126,24 +151,26 @@
         
         .setting-group label {
             font-size: 1rem;
+            font-weight: 500;
         }
         
         .setting-group input {
-            background-color: var(--dark-color);
-            color: var(--light-color);
-            border: 1px solid var(--light-color);
-            border-radius: 5px;
+            background-color: white;
+            color: var(--text-dark);
+            border: 2px solid var(--pastel-purple);
+            border-radius: 10px;
             padding: 8px 12px;
             width: 80px;
             font-size: 1rem;
             text-align: center;
+            font-weight: 600;
         }
         
         .progress-container {
             width: 100%;
-            height: 10px;
-            background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
+            height: 12px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
             margin: 20px 0;
             overflow: hidden;
         }
@@ -152,45 +179,168 @@
             height: 100%;
             width: 0%;
             transition: width 1s linear;
+            border-radius: 10px;
         }
         
         .work .progress-bar {
-            background-color: var(--work-color);
+            background: linear-gradient(to right, var(--pastel-pink), #FFA8BA);
         }
         
         .break .progress-bar {
-            background-color: var(--break-color);
+            background: linear-gradient(to right, var(--pastel-green), #8CD9B8);
         }
         
-        .work .session-type {
-            color: var(--work-color);
+        .audio-control {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.6);
+            padding: 10px 20px;
+            border-radius: 50px;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
         }
         
-        .break .session-type {
-            color: var(--break-color);
+        .audio-control label {
+            font-weight: 500;
+        }
+        
+        #audio-toggle {
+            width: 50px;
+            height: 25px;
+            appearance: none;
+            background-color: #ddd;
+            border-radius: 25px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #audio-toggle:checked {
+            background-color: var(--pastel-green);
+        }
+        
+        #audio-toggle::before {
+            content: '';
+            width: 21px;
+            height: 21px;
+            background-color: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: all 0.3s;
+        }
+        
+        #audio-toggle:checked::before {
+            transform: translateX(25px);
         }
         
         .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--pastel-yellow);
+            color: var(--text-dark);
             padding: 15px 25px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            box-shadow: var(--shadow);
             transform: translateX(150%);
             transition: transform 0.5s ease;
             z-index: 1000;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         
         .notification.show {
             transform: translateX(0);
         }
         
+        /* Sticker styles */
+        .sticker {
+            position: absolute;
+            z-index: 1;
+            opacity: 0.9;
+            transition: transform 0.5s ease;
+        }
+        
+        .sticker:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .sticker-1 {
+            top: 10%;
+            left: 5%;
+            font-size: 4rem;
+            color: var(--pastel-pink);
+            transform: rotate(-15deg);
+        }
+        
+        .sticker-2 {
+            top: 15%;
+            right: 8%;
+            font-size: 3.5rem;
+            color: var(--pastel-green);
+            transform: rotate(10deg);
+        }
+        
+        .sticker-3 {
+            bottom: 20%;
+            left: 7%;
+            font-size: 4rem;
+            color: var(--pastel-purple);
+            transform: rotate(-10deg);
+        }
+        
+        .sticker-4 {
+            bottom: 15%;
+            right: 5%;
+            font-size: 3rem;
+            color: var(--pastel-blue);
+            transform: rotate(15deg);
+        }
+        
+        .sticker-5 {
+            top: 40%;
+            left: 3%;
+            font-size: 2.5rem;
+            color: var(--pastel-yellow);
+            transform: rotate(-5deg);
+        }
+        
+        .sticker-6 {
+            top: 35%;
+            right: 4%;
+            font-size: 3rem;
+            color: var(--pastel-pink);
+            transform: rotate(5deg);
+        }
+        
+        .volume-control {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .volume-control label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        #volume-slider {
+            width: 100px;
+        }
+        
         @media (max-width: 600px) {
             .container {
-                padding: 20px;
+                padding: 30px 20px;
             }
             
             .timer-display {
@@ -200,11 +350,23 @@
             .controls {
                 flex-wrap: wrap;
             }
+            
+            .sticker {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- Stickers -->
+    <div class="sticker sticker-1"><i class="fas fa-cloud"></i></div>
+    <div class="sticker sticker-2"><i class="fas fa-star"></i></div>
+    <div class="sticker sticker-3"><i class="fas fa-heart"></i></div>
+    <div class="sticker sticker-4"><i class="fas fa-moon"></i></div>
+    <div class="sticker sticker-5"><i class="fas fa-feather-alt"></i></div>
+    <div class="sticker sticker-6"><i class="fas fa-bolt"></i></div>
+    
+    <div class="container work">
         <h1>Pomodoro Timer</h1>
         
         <div class="timer-display" id="timer">25:00</div>
@@ -216,9 +378,19 @@
         </div>
         
         <div class="controls">
-            <button id="start-btn">Start</button>
-            <button id="pause-btn">Pause</button>
-            <button id="reset-btn">Reset</button>
+            <button id="start-btn"><i class="fas fa-play"></i> Start</button>
+            <button id="pause-btn"><i class="fas fa-pause"></i> Pause</button>
+            <button id="reset-btn"><i class="fas fa-redo"></i> Reset</button>
+        </div>
+        
+        <div class="audio-control">
+            <label for="audio-toggle">Moon Maiden Audio:</label>
+            <input type="checkbox" id="audio-toggle">
+        </div>
+        
+        <div class="volume-control">
+            <label for="volume-slider">Volume:</label>
+            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
         </div>
         
         <div class="settings">
@@ -237,8 +409,15 @@
     </div>
     
     <div class="notification" id="notification">
+        <i class="fas fa-bell"></i>
         Time's up! Starting break session.
     </div>
+
+    <!-- Hidden audio element -->
+    <audio id="lofi-audio" loop>
+        <source src="Moon-maiden-audio.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -253,6 +432,9 @@
             const progressBar = document.getElementById('progress-bar');
             const notification = document.getElementById('notification');
             const container = document.querySelector('.container');
+            const audioToggle = document.getElementById('audio-toggle');
+            const lofiAudio = document.getElementById('lofi-audio');
+            const volumeSlider = document.getElementById('volume-slider');
             
             // Timer variables
             let timer;
@@ -260,6 +442,10 @@
             let isWorkSession = true;
             let timeLeft;
             let totalTime;
+            let audioEnabled = false;
+            
+            // Set initial volume
+            lofiAudio.volume = volumeSlider.value;
             
             // Initialize timer
             function initializeTimer() {
@@ -290,6 +476,20 @@
             function startTimer() {
                 if (!isRunning) {
                     isRunning = true;
+                    
+                    // Start lofi audio if enabled
+                    if (audioEnabled) {
+                        lofiAudio.play().catch(e => {
+                            console.log("Audio play failed:", e);
+                            // Show user-friendly message
+                            notification.innerHTML = '<i class="fas fa-volume-mute"></i> Audio failed to play. Please interact with page first.';
+                            notification.classList.add('show');
+                            setTimeout(() => {
+                                notification.classList.remove('show');
+                            }, 5000);
+                        });
+                    }
+                    
                     timer = setInterval(() => {
                         timeLeft--;
                         updateDisplay();
@@ -310,6 +510,9 @@
                 if (isRunning) {
                     clearInterval(timer);
                     isRunning = false;
+                    
+                    // Pause audio
+                    lofiAudio.pause();
                 }
             }
             
@@ -317,6 +520,8 @@
             function resetTimer() {
                 clearInterval(timer);
                 isRunning = false;
+                lofiAudio.pause();
+                lofiAudio.currentTime = 0;
                 initializeTimer();
             }
             
@@ -331,9 +536,9 @@
                 container.className = isWorkSession ? 'container work' : 'container break';
                 
                 // Update notification message
-                notification.textContent = isWorkSession ? 
-                    'Break is over! Starting work session.' : 
-                    'Time\'s up! Starting break session.';
+                notification.innerHTML = isWorkSession ? 
+                    '<i class="fas fa-briefcase"></i> Break is over! Starting work session.' : 
+                    '<i class="fas fa-coffee"></i> Time\'s up! Starting break session.';
                 
                 // Initialize the new session timer
                 initializeTimer();
@@ -395,8 +600,38 @@
                 }
             });
             
+            audioToggle.addEventListener('change', function() {
+                audioEnabled = this.checked;
+                if (!audioEnabled) {
+                    lofiAudio.pause();
+                    lofiAudio.currentTime = 0;
+                } else if (isRunning) {
+                    lofiAudio.play().catch(e => {
+                        console.log("Audio play failed:", e);
+                    });
+                }
+            });
+            
+            volumeSlider.addEventListener('input', function() {
+                lofiAudio.volume = this.value;
+            });
+            
             // Initialize the timer on page load
             initializeTimer();
+            
+            // Add a one-time click event to enable audio (required by some browsers)
+            document.body.addEventListener('click', function initAudio() {
+                // This is just to initialize the audio context
+                if (lofiAudio.paused) {
+                    lofiAudio.play().then(() => {
+                        lofiAudio.pause();
+                    }).catch(e => {
+                        console.log("Audio initialization failed:", e);
+                    });
+                }
+                // Remove the event listener after first interaction
+                document.body.removeEventListener('click', initAudio);
+            });
         });
     </script>
 </body>
