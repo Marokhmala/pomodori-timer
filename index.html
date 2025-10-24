@@ -62,7 +62,7 @@
             justify-content: center;
             min-height: 100vh;
             padding: 20px;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
             transition: background 0.5s ease;
         }
@@ -240,7 +240,7 @@
         .container {
             background-color: var(--card-light);
             border-radius: 25px;
-            padding: 40px 30px;
+            padding: 30px 20px;
             width: 100%;
             max-width: 500px;
             box-shadow: var(--shadow);
@@ -254,28 +254,28 @@
         }
         
         h1 {
-            margin-bottom: 25px;
-            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-size: 2.2rem;
             color: var(--text-dark);
             font-weight: 700;
         }
         
         .timer-display {
-            font-size: 5.5rem;
+            font-size: 4.5rem;
             font-weight: 700;
-            margin: 30px 0;
+            margin: 25px 0;
             font-family: 'Courier New', monospace;
             color: var(--text-dark);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
         
         .session-type {
-            font-size: 1.6rem;
-            margin-bottom: 20px;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: 600;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 50px;
             display: inline-block;
         }
@@ -293,8 +293,9 @@
         .controls {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin: 30px 0;
+            gap: 12px;
+            margin: 25px 0;
+            flex-wrap: wrap;
         }
         
         button {
@@ -302,7 +303,7 @@
             color: var(--text-dark);
             border: none;
             border-radius: 50px;
-            padding: 12px 25px;
+            padding: 12px 20px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
@@ -311,6 +312,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            min-height: 48px; /* Better touch target */
         }
         
         button:hover {
@@ -493,18 +495,19 @@
         
         #volume-slider {
             width: 100px;
+            height: 8px;
         }
         
         .theme-toggle {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             background: var(--pastel-purple);
             border: none;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            font-size: 1.3rem;
             cursor: pointer;
             color: var(--text-dark);
             box-shadow: var(--shadow);
@@ -549,11 +552,12 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 10px;
             background-color: rgba(255, 255, 255, 0.5);
             cursor: pointer;
             transition: all 0.2s;
+            min-height: 50px; /* Better touch target */
         }
         
         .dark-mode .music-track {
@@ -573,8 +577,8 @@
         }
         
         .track-checkbox {
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
             border-radius: 4px;
             border: 2px solid var(--pastel-purple);
             display: flex;
@@ -638,14 +642,14 @@
             color: var(--text-dark);
             border: 2px solid var(--pastel-purple);
             border-radius: 10px;
-            padding: 10px 15px;
+            padding: 12px 15px;
             font-size: 1rem;
             min-width: 0;
         }
         
         .task-input button {
             background-color: var(--pastel-green);
-            padding: 10px 20px;
+            padding: 12px 20px;
             white-space: nowrap;
         }
         
@@ -686,8 +690,8 @@
         }
         
         .task-checkbox {
-            width: 20px;
-            height: 20px;
+            width: 22px;
+            height: 22px;
             border-radius: 50%;
             border: 2px solid var(--pastel-purple);
             display: flex;
@@ -720,7 +724,7 @@
         
         .task-actions {
             display: flex;
-            gap: 5px;
+            gap: 8px;
             flex-shrink: 0;
             align-self: flex-start;
         }
@@ -728,12 +732,13 @@
         .task-actions button {
             background: none;
             border: none;
-            padding: 5px;
+            padding: 6px;
             font-size: 0.9rem;
             color: var(--text-dark);
             opacity: 0.7;
             box-shadow: none;
             flex-shrink: 0;
+            min-height: auto;
         }
         
         .task-actions button:hover {
@@ -761,10 +766,11 @@
             background: var(--pastel-blue);
             border: none;
             border-radius: 20px;
-            padding: 8px 15px;
+            padding: 10px 15px;
             font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
+            min-height: 40px;
         }
         
         .weather-btn.active {
@@ -792,40 +798,78 @@
             .side-panel {
                 flex: 1;
                 max-width: 350px;
+                display: block !important;
             }
             
             .container {
                 max-width: 500px;
                 margin: 0;
+                padding: 40px 30px;
             }
             
             .theme-toggle {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                z-index: 100;
-            }
-        }
-        
-        /* Mobile Layout */
-        @media (max-width: 1023px) {
-            .desktop-container {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .side-panel {
-                display: none;
-            }
-            
-            .container {
-                max-width: 500px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
             }
             
             .mobile-task-box,
             .mobile-music-box,
             .mobile-settings {
-                display: block;
+                display: none !important;
+            }
+        }
+        
+        /* Mobile Layout */
+        @media (max-width: 1023px) {
+            body {
+                padding: 15px;
+                justify-content: flex-start;
+                min-height: 100vh;
+            }
+            
+            .desktop-container {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                gap: 15px;
+            }
+            
+            .side-panel {
+                display: none;
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .container {
+                max-width: 100%;
+                padding: 25px 15px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+            
+            .timer-display {
+                font-size: 3.5rem;
+                margin: 20px 0;
+            }
+            
+            .session-type {
+                font-size: 1.2rem;
+                padding: 6px 12px;
+            }
+            
+            .controls {
+                gap: 8px;
+                margin: 20px 0;
+            }
+            
+            button {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+                min-height: 44px;
             }
             
             .theme-toggle {
@@ -833,17 +877,33 @@
                 right: 10px;
                 width: 40px;
                 height: 40px;
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             
-            /* Mobile-specific task improvements */
+            .mobile-task-box,
+            .mobile-music-box,
+            .mobile-settings {
+                display: block;
+                width: 100%;
+                margin-top: 15px;
+            }
+            
             .task-item {
                 padding: 10px 12px;
             }
             
             .task-actions {
-                flex-direction: column;
-                gap: 2px;
+                flex-direction: row;
+                gap: 5px;
+            }
+            
+            .task-actions button {
+                padding: 5px;
+            }
+            
+            .music-track {
+                padding: 8px 10px;
+                min-height: 44px;
             }
         }
         
@@ -854,13 +914,49 @@
             display: none;
         }
         
+        /* Mobile Navigation */
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--card-light);
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: var(--shadow);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+        
+        .dark-mode .mobile-nav {
+            background-color: var(--card-dark);
+        }
+        
+        .mobile-nav button {
+            background: none;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mobile-nav button.active {
+            background-color: var(--pastel-purple);
+            color: white;
+        }
+        
         @media (max-width: 1023px) {
-            .mobile-task-box,
-            .mobile-music-box,
-            .mobile-settings {
-                display: block;
-                width: 100%;
-                margin-top: 20px;
+            .mobile-nav {
+                display: flex;
+                gap: 10px;
             }
         }
     </style>
@@ -884,7 +980,7 @@
     </div>
     
     <div class="desktop-container">
-        <!-- Left Panel - Tasks Only -->
+        <!-- Left Panel - Tasks Only (Desktop) -->
         <div class="side-panel left-panel">
             <div class="task-box">
                 <h2>
@@ -985,7 +1081,7 @@
             </div>
         </div>
         
-        <!-- Right Panel - Music & Settings -->
+        <!-- Right Panel - Music & Settings (Desktop) -->
         <div class="side-panel right-panel">
             <div class="music-box">
                 <h2>Music Box</h2>
@@ -1008,6 +1104,14 @@
                 </div>
             </div>
         </div>
+    </div>
+    
+    <!-- Mobile Navigation -->
+    <div class="mobile-nav">
+        <button id="nav-timer" class="active"><i class="fas fa-clock"></i></button>
+        <button id="nav-tasks"><i class="fas fa-tasks"></i></button>
+        <button id="nav-music"><i class="fas fa-music"></i></button>
+        <button id="nav-settings"><i class="fas fa-cog"></i></button>
     </div>
     
     <div class="notification" id="notification">
@@ -1063,6 +1167,15 @@
             const mobileMusicTracksContainer = document.getElementById('mobile-music-tracks');
             const mobileWorkDurationInput = document.getElementById('mobile-work-duration');
             const mobileBreakDurationInput = document.getElementById('mobile-break-duration');
+            
+            // Mobile navigation
+            const navTimer = document.getElementById('nav-timer');
+            const navTasks = document.getElementById('nav-tasks');
+            const navMusic = document.getElementById('nav-music');
+            const navSettings = document.getElementById('nav-settings');
+            const mobileTaskBox = document.querySelector('.mobile-task-box');
+            const mobileMusicBox = document.querySelector('.mobile-music-box');
+            const mobileSettings = document.querySelector('.mobile-settings');
             
             // Timer variables
             let timer;
@@ -1163,6 +1276,57 @@
                         snowEffect.style.opacity = '1';
                         break;
                 }
+            }
+            
+            // Mobile navigation functions
+            function setupMobileNavigation() {
+                // Show timer by default, hide others
+                mobileTaskBox.style.display = 'none';
+                mobileMusicBox.style.display = 'none';
+                mobileSettings.style.display = 'none';
+                
+                // Timer button
+                navTimer.addEventListener('click', function() {
+                    setActiveNav(navTimer);
+                    mobileTaskBox.style.display = 'none';
+                    mobileMusicBox.style.display = 'none';
+                    mobileSettings.style.display = 'none';
+                });
+                
+                // Tasks button
+                navTasks.addEventListener('click', function() {
+                    setActiveNav(navTasks);
+                    mobileTaskBox.style.display = 'block';
+                    mobileMusicBox.style.display = 'none';
+                    mobileSettings.style.display = 'none';
+                });
+                
+                // Music button
+                navMusic.addEventListener('click', function() {
+                    setActiveNav(navMusic);
+                    mobileTaskBox.style.display = 'none';
+                    mobileMusicBox.style.display = 'block';
+                    mobileSettings.style.display = 'none';
+                });
+                
+                // Settings button
+                navSettings.addEventListener('click', function() {
+                    setActiveNav(navSettings);
+                    mobileTaskBox.style.display = 'none';
+                    mobileMusicBox.style.display = 'none';
+                    mobileSettings.style.display = 'block';
+                });
+            }
+            
+            function setActiveNav(activeButton) {
+                // Remove active class from all buttons
+                navTimer.classList.remove('active');
+                navTasks.classList.remove('active');
+                navMusic.classList.remove('active');
+                navSettings.classList.remove('active');
+                
+                // Add active class to clicked button
+                activeButton.classList.add('active');
             }
             
             // Initialize tasks
@@ -1589,6 +1753,7 @@
             initializeTimer();
             initializeTasks();
             initializeMusicTracks();
+            setupMobileNavigation();
             
             // Add a one-time click event to enable audio (required by some browsers)
             document.body.addEventListener('click', function initAudio() {
